@@ -19,13 +19,14 @@
         </h1>
         <p href="#" class="pb-8 text-sm">
           By <a href="#" class="font-semibold hover:text-gray-800">{{ $post->user->name }}</a>, Published on
-          {{ $post->getFormattedDate() }}
+          {{ $post->getFormattedDate() }} | {{ $post->human_read_time }}
         </p>
 
         <div>
           {!! $post->body !!}
         </div>
 
+        <livewire:upvote-downvote :post="$post" />
       </div>
     </article>
 
@@ -44,13 +45,15 @@
         @endif
       </div>
       <div class="w-1/2">
-        <a href="{{ route('view', $next) }}" class="block w-full bg-white p-6 text-right shadow hover:shadow-md">
-          <p class="flex items-center justify-end text-lg font-bold text-blue-800">Next <i
-              class="fas fa-arrow-right pl-1"></i></p>
-          <p class="pt-2">
-            {{ \Illuminate\Support\Str::words($next->title, 8) }}
-          </p>
-        </a>
+        @if ($next)
+          <a href="{{ route('view', $next) }}" class="block w-full bg-white p-6 text-right shadow hover:shadow-md">
+            <p class="flex items-center justify-end text-lg font-bold text-blue-800">Next <i
+                class="fas fa-arrow-right pl-1"></i></p>
+            <p class="pt-2">
+              {{ \Illuminate\Support\Str::words($next->title, 8) }}
+            </p>
+          </a>
+        @endif
       </div>
     </div>
 
