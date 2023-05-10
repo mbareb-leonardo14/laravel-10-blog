@@ -57,8 +57,12 @@
             Us</a>
         </div>
 
-        <div>
-
+        <div class="flex items-center">
+          <form action="{{ route('search') }}" method="GET">
+            <input name="q" value="{{ request()->get('q') }}"
+              class="block w-full rounded-md border-0 px-3.5 py-2 font-medium text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset sm:text-sm sm:leading-6"
+              placeholder="Go to any"></input>
+          </form>
           @auth()
             <div class="flex sm:ml-6 sm:items-center">
               <x-dropdown align="right" width="48">
@@ -106,7 +110,7 @@
   </nav>
 
 
-  <div class="container mx-auto flex flex-wrap py-6">
+  <div class="container mx-auto py-6">
     {{ $slot }}
   </div>
 

@@ -10,7 +10,7 @@
               <h2 class="mb-2 text-lg font-bold text-blue-500 sm:text-xl">
                 {!! str_replace(
                     request()->get('q'),
-                    '<span class="bg-yellow-300">' . request()->get('q') . '</span>',
+                    '<span class="bg-red-600 text-white">' . request()->get('q') . '</span>',
                     $post->title,
                 ) !!}
               </h2>

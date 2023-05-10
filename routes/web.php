@@ -36,6 +36,7 @@ require __DIR__ . '/auth.php';
 
 Route::controller(PostController::class)->group(function () {
     Route::get('/', 'home')->name('home');
+    Route::get('/search', 'search')->name('search');
     Route::get('/category/{category:slug}', 'byCategory')->name('by-category');
     Route::get('/{post:slug}', 'show')->name('view');
 });
