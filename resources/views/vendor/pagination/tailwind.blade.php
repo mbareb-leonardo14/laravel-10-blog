@@ -31,11 +31,11 @@
                 @if ($page == $paginator->currentPage())
                   <span aria-current="page">
                     <span
-                      class="flex h-10 w-10 items-center justify-center bg-blue-800 text-sm font-semibold text-white hover:bg-blue-600">{{ $page }}</span>
+                      class="flex h-10 w-10 items-center justify-center bg-black text-sm font-semibold text-white hover:bg-gray-800">{{ $page }}</span>
                   </span>
                 @else
                   <a href="{{ $url }}"
-                    class="flex h-10 w-10 items-center justify-center text-sm font-semibold text-gray-800 hover:bg-blue-600 hover:text-white"
+                    class="hover:gray-800 hover:border-b-3 flex h-10 w-10 items-center justify-center text-sm font-semibold text-gray-800"
                     aria-label="{{ __('Go to page :page', ['page' => $page]) }}">
                     {{ $page }}
                   </a>

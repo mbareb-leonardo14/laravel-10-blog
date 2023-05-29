@@ -3,18 +3,26 @@
 namespace App\Filament\Resources;
 
 use Closure;
-use Filament\Forms;
+use stdClass;
 use App\Models\Post;
 use Filament\Tables;
+use Illuminate\Support\Str;
 use Filament\Resources\Form;
 use Filament\Resources\Table;
 use Filament\Resources\Resource;
-use Illuminate\Database\Eloquent\Builder;
-use App\Filament\Resources\PostResource\Pages;
-use Illuminate\Database\Eloquent\SoftDeletingScope;
-use App\Filament\Resources\PostResource\RelationManagers;
+use Filament\Forms\Components\Card;
 use Filament\Forms\Components\Grid;
-use Illuminate\Support\Str;
+use Filament\Forms\Components\Select;
+use Filament\Forms\Components\Toggle;
+use Filament\Tables\Columns\IconColumn;
+use Filament\Tables\Columns\TextColumn;
+use Filament\Tables\Contracts\HasTable;
+use Filament\Forms\Components\TextInput;
+use Filament\Tables\Columns\ImageColumn;
+use Filament\Forms\Components\FileUpload;
+use Filament\Forms\Components\RichEditor;
+use Filament\Forms\Components\DateTimePicker;
+use App\Filament\Resources\PostResource\Pages;
 
 class PostResource extends Resource
 {
@@ -22,44 +30,52 @@ class PostResource extends Resource
 
     protected static ?string $navigationIcon = 'heroicon-o-document-text';
 
-    protected static ?string $navigationGroup = 'Content';
+    protected static ?string $activeNavigationIcon = 'heroicon-s-document-text';
+
+
+    protected static ?string $navigationGroup = 'Blog';
+
+    protected static function getNavigationBadge(): ?string
+    {
+        return static::getModel()::count();
+    }
+
+    protected static function getNavigationBadgeColor(): ?string
+    {
+        return static::getModel()::count() > 10 ? 'warning' : 'primary';
+    }
 
     public static function form(Form $form): Form
     {
         return $form
             ->schema([
-                Forms\Components\Card::make()
+                Card::make()
                     ->schema([
-                        Forms\Components\Grid::make(2)
+                        Grid::make(2)
                             ->schema([
-                                Forms\Components\TextInput::make('title')
+                                TextInput::make('title')
                                     ->required()
                                     ->maxLength(2048)
                                     ->reactive()
                                     ->afterStateUpdated(function (Closure $set, $state) {
                                         $set('slug', Str::slug($state));
                                     }),
-                                Forms\Components\TextInput::make('slug')
-                                    ->required()
-                                    ->maxLength(2048),
+                                TextInput::make('slug')->required()->maxLength(2048),
                             ]),
-                        Forms\Components\RichEditor::make('body')
-                            ->required(),
-                        Forms\Components\TextInput::make('meta_title'),
-                        Forms\Components\TextInput::make('meta_description'),
-                        Forms\Components\Toggle::make('active')
-                            ->required(),
-                        Forms\Components\DateTimePicker::make('published_at'),
+                        RichEditor::make('body')->required(),
+                        TextInput::make('meta_title'),
+                        TextInput::make('meta_description'),
+                        Toggle::make('active')->required(),
+                        DateTimePicker::make('published_at')
                     ])->columnSpan(8),
 
-                Forms\Components\Card::make()
-                    ->schema([
-                        Forms\Components\FileUpload::make('thumbnail'),
-                        Forms\Components\Select::make('categories')
-                            ->multiple()
-                            ->relationship('categories', 'title')
-                            ->required(),
-                    ])->columnSpan(4)
+                Card::make()->schema([
+                    FileUpload::make('thumbnail'),
+                    Select::make('categories')
+                        ->multiple()
+                        ->relationship('categories', 'title')
+                        ->required(),
+                ])->columnSpan(4)
             ])->columns(12);
     }
 
@@ -67,16 +83,21 @@ class PostResource extends Resource
     {
         return $table
             ->columns([
-                Tables\Columns\ImageColumn::make('thumbnail'),
-                Tables\Columns\TextColumn::make('title')->searchable(['title', 'body'])->sortable(),
-                Tables\Columns\IconColumn::make('active')
-                    ->boolean()
-                    ->sortable(),
-                Tables\Columns\TextColumn::make('published_at')
-                    ->dateTime()
-                    ->sortable(),
-                Tables\Columns\TextColumn::make('updated_at')
-                    ->dateTime(),
+                TextColumn::make('No')->color('secondary')->size('sm')->getStateUsing(
+                    static function (stdClass $rowLoop, HasTable $livewire): string {
+                        return (string) (
+                            $rowLoop->iteration +
+                            ($livewire->tableRecordsPerPage * (
+                                $livewire->page - 1
+                            ))
+                        );
+                    }
+                ),
+                ImageColumn::make('thumbnail'),
+                TextColumn::make('title')->searchable(['title', 'body']),
+                IconColumn::make('active')->boolean(),
+                TextColumn::make('published_at')->dateTime(),
+                TextColumn::make('updated_at')->dateTime()
             ])
             ->filters([
                 //
@@ -84,7 +105,7 @@ class PostResource extends Resource
             ->actions([
                 Tables\Actions\ViewAction::make(),
                 Tables\Actions\EditAction::make(),
-                Tables\Actions\DeleteAction::make(),
+                Tables\Actions\DeleteAction::make()
             ])
             ->bulkActions([
                 Tables\Actions\DeleteBulkAction::make(),

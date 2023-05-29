@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use App\Models\Post;
 use Illuminate\Support\Carbon;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
@@ -11,7 +12,9 @@ class Category extends Model
 {
     use HasFactory;
 
-    protected $fillable = ['title', 'slug'];
+    protected $guarded = [''];
+
+    // protected $fillable = ['title', 'slug'];
 
     public function posts(): BelongsToMany
     {

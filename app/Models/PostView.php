@@ -9,12 +9,12 @@ class PostView extends Model
 {
     use HasFactory;
 
-    // protected $guarded = [''];
+    protected $guarded = [''];
 
-    protected $fillable = [
-        'ip_address',
-        'user_agent',
-        'post_id',
-        'user_id'
-    ];
+// protected $fillable = [
+//     'ip_address',
+//     'user_agent',
+//     'post_id',
+//     'user_id'
+// ];
 }

@@ -7,7 +7,7 @@
         @foreach ($posts as $post)
           <div>
             <a href="{{ route('view', $post) }}">
-              <h2 class="mb-2 text-lg font-bold text-blue-500 sm:text-xl">
+              <h2 class="mb-2 text-lg font-bold text-black sm:text-xl">
                 {!! str_replace(
                     request()->get('q'),
                     '<span class="bg-red-600 text-white">' . request()->get('q') . '</span>',

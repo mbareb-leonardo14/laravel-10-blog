@@ -95,7 +95,7 @@ class PostController extends Controller
                 ->get();
         }
 
-        // show recent categories with their lates posts
+        // show recent categories with their latest posts
         $categories = Category::query()
             ->whereHas('posts', function ($query) {
                 $query

@@ -1,19 +1,22 @@
 <!DOCTYPE html>
-<html lang="{{ str_replace('_', '-', app()->getLocale()) }}">
+<html lang="{{ str_replace('_', '-', app()->getLocale()) }}" class="dark">
 
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="csrf-token" content="{{ csrf_token() }}">
+
   <title>{{ $metaTitle ?: 'LUMINAIRE' }}</title>
   <meta name="author" content="LUMINAIRE">
   <meta name="description" content="{{ $metaDescription }}">
 
-  <style>
-  </style>
-
   <!-- Font Awesome -->
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.13.0/js/all.min.js"
-    integrity="sha256-KzZiKy0DWYsnwMF+X1DvQngQ2/FxF7MF3Ff72XcpuPs=" crossorigin="anonymous"></script>
+  {{-- <script src="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.13.0/js/all.min.js"
+    integrity="sha256-KzZiKy0DWYsnwMF+X1DvQngQ2/FxF7MF3Ff72XcpuPs=" crossorigin="anonymous"></script> --}}
+
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"
+    integrity="sha512-iecdLmaskl7CVkqkXNQ/ZH/XLlvWZOJyj7Yy7tcenmpD1ypASozpmT/E0iPtmFIB46ZmdtAc9eNBvH0H/ZpiBw=="
+    crossorigin="anonymous" referrerpolicy="no-referrer" />
 
   @livewireStyles
 
@@ -23,102 +26,25 @@
 
 <body class="font-family-montserrat bg-white">
 
-  <!-- Text Header -->
-  <header class="container mx-auto w-full">
-    <div class="flex flex-col items-center py-12">
-      <a class="text-5xl font-bold uppercase text-gray-800 hover:text-gray-700" href="{{ route('home') }}">
-        {{ \App\Models\TextWidget::getTitle('who-i-am') }} Blog
-      </a>
-      <p class="text-lg text-gray-600">
-        {{ \App\Models\TextWidget::getTitle('header') }}
-      </p>
-    </div>
-  </header>
+  @include('partials.nav')
+  @include('partials.header')
 
-  <!-- Topic Nav -->
-  <nav class="w-full border-t border-b bg-gray-100 py-4" x-data="{ open: false }">
-    <div class="block sm:hidden">
-      <a href="#" class="block items-center justify-center text-center text-base font-bold uppercase md:hidden"
-        @click="open = !open">
-        Topics <i :class="open ? 'fa-chevron-down' : 'fa-chevron-up'" class="fas ml-2"></i>
-      </a>
-    </div>
-    <div :class="open ? 'block' : 'hidden'" class="w-full flex-grow sm:flex sm:w-auto sm:items-center">
-      <div
-        class="container mx-auto mt-0 flex w-full flex-col items-center justify-between px-6 py-2 text-sm font-bold uppercase sm:flex-row">
 
-        <div>
-          <a href="{{ route('home') }}" class="mx-2 rounded py-2 px-4 hover:bg-blue-600 hover:text-white">Home</a>
-          @foreach ($categories as $category)
-            <a href="{{ route('by-category', $category) }}"
-              class="mx-2 rounded py-2 px-4 hover:bg-blue-600 hover:text-white">{{ $category->title }}</a>
-          @endforeach
-          <a href="{{ route('about-us') }}" class="mx-2 rounded py-2 px-4 hover:bg-blue-600 hover:text-white">About
-            Us</a>
-        </div>
-
-        <div class="flex items-center">
-          <form action="{{ route('search') }}" method="GET">
-            <input name="q" value="{{ request()->get('q') }}"
-              class="block w-full rounded-md border-0 px-3.5 py-2 font-medium text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset sm:text-sm sm:leading-6"
-              placeholder="Go to any"></input>
-          </form>
-          @auth()
-            <div class="flex sm:ml-6 sm:items-center">
-              <x-dropdown align="right" width="48">
-                <x-slot name="trigger">
-                  <button class="mx-2 flex items-center rounded py-2 px-4 hover:bg-blue-600 hover:text-white">
-                    <div>{{ Auth::user()->name }}</div>
-
-                    <div class="ml-1">
-                      <svg class="h-4 w-4 fill-current" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20">
-                        <path fill-rule="evenodd"
-                          d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z"
-                          clip-rule="evenodd" />
-                      </svg>
-                    </div>
-                  </button>
-                </x-slot>
-
-                <x-slot name="content">
-                  <x-dropdown-link :href="route('profile.edit')">
-                    {{ __('Profile') }}
-                  </x-dropdown-link>
-
-                  <!-- Authentication -->
-                  <form method="POST" action="{{ route('logout') }}">
-                    @csrf
-
-                    <x-dropdown-link :href="route('logout')"
-                      onclick="event.preventDefault();
-                                          this.closest('form').submit();">
-                      {{ __('Log Out') }}
-                    </x-dropdown-link>
-                  </form>
-                </x-slot>
-              </x-dropdown>
-            </div>
-          @else
-            <a href="{{ route('login') }}" class="mx-2 rounded py-2 px-4 hover:bg-blue-600 hover:text-white">Login</a>
-            <a href="{{ route('register') }}" class="mx-2 rounded bg-blue-600 py-2 px-4 text-white">Register</a>
-          @endauth
-
-        </div>
-
+  <!-- Page Heading -->
+  @if (isset($header))
+    <header class="bg-white shadow dark:bg-gray-800">
+      <div class="mx-auto max-w-7xl py-6 px-4 sm:px-6 lg:px-8">
+        {{ $header }}
       </div>
-    </div>
-  </nav>
-
+    </header>
+  @endif
 
   <div class="container mx-auto py-6">
     {{ $slot }}
   </div>
 
-  <footer class="w-full border-t bg-white pb-12">
-    <div class="container mx-auto flex w-full flex-col items-center">
-      <div class="py-6 uppercase">&copy; myblog.com</div>
-    </div>
-  </footer>
+  @include('partials.footer')
+
 
   @livewireScripts
 

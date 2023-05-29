@@ -10,7 +10,7 @@ class TextWidget extends Model
 {
     use HasFactory;
 
-    protected $guarded = ['id'];
+    protected $guarded = [''];
 
     public static function getTitle(string $key): string
     {
