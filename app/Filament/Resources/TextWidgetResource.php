@@ -43,17 +43,18 @@ class TextWidgetResource extends Resource
         return $table
             ->columns([
                 Tables\Columns\TextColumn::make('key'),
-                Tables\Columns\TextColumn::make('title'),
                 Tables\Columns\IconColumn::make('active')
                     ->boolean(),
-                Tables\Columns\TextColumn::make('created_at')
+                Tables\Columns\TextColumn::make('updated_at')
                     ->dateTime(),
             ])
             ->filters([
                 //
             ])
             ->actions([
+                Tables\Actions\ViewAction::make(),
                 Tables\Actions\EditAction::make(),
+                Tables\Actions\DeleteAction::make(),
             ])
             ->bulkActions([
                 Tables\Actions\DeleteBulkAction::make(),
@@ -72,6 +73,7 @@ class TextWidgetResource extends Resource
         return [
             'index'  => Pages\ListTextWidgets::route('/'),
             'create' => Pages\CreateTextWidget::route('/create'),
+            'view'   => Pages\ViewTextWidget::route('/{record}'),
             'edit'   => Pages\EditTextWidget::route('/{record}/edit'),
         ];
     }

@@ -23,6 +23,8 @@ class CategoryResource extends Resource
 {
     protected static ?string $model = Category::class;
 
+    protected static ?string $navigationLabel = 'Tag';
+
     protected static ?string $navigationIcon = 'heroicon-o-tag';
 
     protected static function getActiveNavigationIcon(): string

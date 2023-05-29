@@ -2,40 +2,43 @@
 
 namespace App\Models;
 
-use Illuminate\Support\Facades\Cache;
-use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Database\Eloquent\Model;
+use Illuminate\Support\Facades\Cache;
 
 class TextWidget extends Model
 {
     use HasFactory;
 
-    protected $guarded = [''];
+    protected $fillable = [
+        'key',
+        'image',
+        'title',
+        'content',
+        'active'
+    ];
 
     public static function getTitle(string $key): string
     {
-        $widget = Cache::get('text-widget-' . $key, function () use ($key) {
-            return TextWidget::query()->where('key', '=', $key)->where('active', '=', 1)->first();
-        });
-        if ($widget) {
-            return $widget->title;
+        $widget = TextWidget::query()->where('key', $key)->first();
+
+        if (!$widget) {
+            return '';
         }
 
-        return '';
+        return $widget->title;
     }
 
     public static function getContent(string $key): string
     {
         $widget = Cache::get('text-widget-' . $key, function () use ($key) {
-            return TextWidget::query()
-                ->where('key', '=', $key)
-                ->where('active', '=', 1)
-                ->first();
+            return TextWidget::query()->where('key', $key)->first();
         });
-        if ($widget) {
-            return $widget->content;
+
+        if (!$widget) {
+            return '';
         }
 
-        return '';
+        return $widget->content;
     }
 }

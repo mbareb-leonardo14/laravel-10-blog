@@ -21,7 +21,7 @@ class PostFactory extends Factory
         return [
             'title'        => $title,
             'slug'         => Str::slug($title),
-            'thumbnail'    => fake()->imageUrl('animals'),
+            // 'thumbnail'    => fake()->imageUrl('animals'),
             //   'body'         => fake()->realText(5000),
             'body'         => fake()->realText(5000),
             'active'       => fake()->boolean(),

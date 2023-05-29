@@ -3,6 +3,7 @@
 namespace App\Providers;
 
 use Filament\Facades\Filament;
+use Illuminate\Support\Facades\Blade;
 use Filament\Navigation\NavigationItem;
 use Filament\Tables\Columns\TextColumn;
 use Illuminate\Support\ServiceProvider;
@@ -15,7 +16,10 @@ class AppServiceProvider extends ServiceProvider
      */
     public function register(): void
     {
-        //
+        Filament::registerRenderHook(
+            'head.end',
+            fn (): string => Blade::render('@vite([\'resources/css/app.css\',\'resources/js/app.js\'])'),
+        );
     }
 
     /**
@@ -38,9 +42,11 @@ class AppServiceProvider extends ServiceProvider
                     ->group('Email')
                     ->sort(3),
             ]);
+            // $user = Filament::auth()->user();
             Filament::registerNavigationGroups([
                 NavigationGroup::make()
                     ->label('Email')
+                    // ->label(Filament::getUserName($user))
                     ->icon('heroicon-o-globe-alt')
             ]);
         });
@@ -58,6 +64,7 @@ class AppServiceProvider extends ServiceProvider
 
         Filament::registerScripts([
             'https://cdn.jsdelivr.net/npm/@ryangjchandler/alpine-tooltip@0.x.x/dist/cdn.min.js',
+            'https://code.iconify.design/2/2.2.1/iconify.min.js',
         ], true);
 
         Filament::registerStyles([

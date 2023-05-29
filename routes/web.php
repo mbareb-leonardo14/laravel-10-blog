@@ -32,7 +32,10 @@ Route::middleware('auth')->group(function () {
 
 require __DIR__ . '/auth.php';
 
-
+Route::get('/about-us', [SiteController::class, 'about'])->name('about-us');
+Route::get('/contact', function () {
+    return view('contact');
+});
 
 Route::controller(PostController::class)->group(function () {
     Route::get('/', 'home')->name('home');
@@ -40,5 +43,3 @@ Route::controller(PostController::class)->group(function () {
     Route::get('/category/{category:slug}', 'byCategory')->name('by-category');
     Route::get('/{post:slug}', 'show')->name('view');
 });
-
-Route::get('/about-us', [SiteController::class, 'about'])->name('about-us');

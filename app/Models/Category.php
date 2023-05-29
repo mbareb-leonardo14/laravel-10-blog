@@ -27,4 +27,13 @@ class Category extends Model
             ->where('active', '=', 1)
             ->whereDate('published_at', '<', Carbon::now());
     }
+
+    public function getThumbnail()
+    {
+        if (str_starts_with($this->thumbnail, 'http')) {
+            return $this->thumbnail;
+        }
+
+        return '/storage/' . $this->thumbnail;
+    }
 }

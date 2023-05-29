@@ -2,10 +2,9 @@
 
 namespace App\Http\Controllers;
 
-use Illuminate\View\View;
 use App\Models\TextWidget;
 use Illuminate\Http\Request;
-use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
+use Illuminate\View\View;
 
 class SiteController extends Controller
 {
@@ -13,11 +12,8 @@ class SiteController extends Controller
     {
         $widget = TextWidget::query()
             ->where('key', '=', 'about-page')
-            ->where('active', '=', true)
-            ->get();
-        if (!$widget) {
-            throw new NotFoundHttpException();
-        }
+            ->where('active', '=', 1)
+            ->first();
 
         return view('about', compact('widget'));
     }

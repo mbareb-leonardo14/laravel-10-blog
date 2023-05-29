@@ -6,7 +6,16 @@
     <article class="my-4 flex flex-col shadow">
       <!-- Article Image -->
       <a href="#" class="m-auto hover:opacity-75">
-        <img src="{{ $post->getThumbnail() }}" class="">
+        {{-- @forelse ($post->categories as $category)
+          <img src="{{ $category->getThumbnail() }}" class="" alt="{{ $category->slug }}">
+        @empty
+          <img src="https://source.unsplash.com/800x300?{{ $category->slug }}" alt="{{ $category->slug }}">
+        @endforelse --}}
+        @empty($post->thumbnail)
+          <img src="https://source.unsplash.com/800x300?{{ $post->category }}">
+        @else
+          <img src="{{ $post->getThumbnail() }}" class="">
+        @endempty
       </a>
       <div class="flex flex-col justify-start bg-white p-6">
         <div class="flex gap-4">

@@ -4,7 +4,7 @@
     <a class="text-5xl font-bold uppercase text-gray-800 hover:text-gray-700" href="{{ route('home') }}">
       {{ \App\Models\TextWidget::getTitle('who-i-am') }} Blog
     </a>
-    <p class="text-lg text-gray-600">
+    <p class="text-center text-lg text-gray-600">
       {{ \App\Models\TextWidget::getTitle('header') }}
     </p>
   </div>
